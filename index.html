@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Find recipes from the ingredients you already have. Reduce food waste and cook smarter.">
+        <title>FlavourFind</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+    html {
+      scroll-behavior: smooth; /* Smooth scrolling effect */
+    }
+  </style>
+    </head>
+    <body>
+       <!-- Header / Navbar -->
+<header class="header">
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+        <img src="images/logo-bg.png" alt="Recipe Finder Logo">
+       <span class="logo-text">FlavourFind</span>
+     </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <a href="#home">Home</a>
+      <a href="#recipes">Recipes</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- login Button -->
+    <div class="auth-buttons">
+    <a href="#" class="loginBtn">Login</a>
+    <a href="#" class="signupBtn">Signup</a>
+  </div>
+  </div>
+</header>
+
+        <!-- Hero Section -->
+         <section id="home" class="hero">
+  <div class="hero-card">
+    <h1>
+      Find Recipes with <span class="highlight">What You Have</span>
+    </h1>
+    <p>
+      Transform your leftover ingredients into delicious meals. Reduce food waste while discovering amazing recipes tailored to what's in your kitchen.
+    </p>
+
+    <form id="heroSearchForm" class="search-bar">
+      <input type="text" id="heroInput" placeholder="Enter ingredients you have... (e.g., chicken, tomatoes, garlic, broccoli.....)">
+      <button type="submit">Cook Now</button>
+    </form>
+
+    <small class="helper-text">Separate ingredients with commas for best results</small>
+  </div>
+</section>
+
+<!--------------------- Recipe Results Section --------------------------->
+<section id="recipes" class="results">
+  <h2>Recipe Results</h2>
+  <div id="recipes-container" class="recipes-grid">
+    <!-- Dynamic recipes will be inserted here; remove static ones after testing -->
+    
+    <!-- Recipe Card 1 -->
+    <div class="recipe-card">
+      <img src="images/result-img1.png" alt="Delicious Pasta">
+      <div class="recipe-card-content">
+        <h3>Creamy Tomato Pasta</h3>
+        <p>A quick and easy pasta dish made with tomatoes, garlic, and cream.</p>
+        <div class="recipe-tags">
+          <span class="recipe-tag">Vegetarian</span>
+          <span class="recipe-tag">Quick</span>
+        </div>
+        <button>View Recipe</button>
+      </div>
+    </div>
+
+    
+
+    <!-- Recipe Card 2 -->
+    <div class="recipe-card">
+      <img src="images/result-img2.png" alt="Fresh Salad">
+      <div class="recipe-card-content">
+        <h3>Green Veggie Salad</h3>
+        <p>Fresh lettuce, cucumber, and avocado tossed with a light dressing.</p>
+        <div class="recipe-tags">
+          <span class="recipe-tag">Vegan</span>
+          <span class="recipe-tag">Healthy</span>
+        </div>
+        <button>View Recipe</button>
+      </div>
+    </div>
+
+    <!-- Recipe Card 3 -->
+    <div class="recipe-card">
+      <img src="images/result-img3.png" alt="Grilled Chicken">
+      <div class="recipe-card-content">
+        <h3>Grilled Chicken</h3>
+        <p>Juicy grilled chicken breast served with herbs and spices.</p>
+        <div class="recipe-tags">
+          <span class="recipe-tag">High Protein</span>
+        </div>
+        <button>View Recipe</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- -------------------------------------------------------------------------------------------------------- -->>
+
+<!-- Recipe Categories Section -->
+<section class="categories">
+  <h2>Explore Categories</h2>
+  <div class="categories-grid">
+
+    <!-- Quick Recipes -->
+     <div class="category-card">
+      <img src="Images/category-img1.png" alt="Quick Recipes Icon">
+      <h3>Quick Recipes</h3>
+      <p>Delicious meals ready in under 30 minutes.</p>
+      <p><span class="highlight">120+</span> recipes</p>
+      <button class="category-btn">Explore Recipes</button>
+     </div>
+
+     <!-- Healthy Choices -->
+     <div class="category-card">
+      <img src="Images/category-img2.png" alt="Healthy Choices Icon">
+      <h3>Healthy Choices</h3>
+      <p>Nutritious and balanced recipes for everyday wellness.</p>
+      <p><span class="highlight">95+</span> recipes</p>
+      <button class="category-btn">Explore Recipes</button>
+     </div>
+
+     <!-- Most Popular -->
+     <div class="category-card">
+      <img src="Images/category-img3.png" alt="Most Popular Icon">
+      <h3>Most Popular</h3>
+      <p>Our top-rated and trending recipes loved by all.</p>
+      <p><span class="highlight">200+</span> recipes</p>
+      <button class="category-btn">Explore Recipes</button>
+     </div>
+  </div>
+</section>
+
+<!-- -------------------------------------------------------------------------------------------------------- -->>
+
+           <!-- Food Waste Awareness / Info Section -->
+            <section class="info">
+                <div class="info-text">
+                    <h2>Transform your kitchen into a <span class="info-highlight">Zero-Waste Haven.</span></h2>
+                    <p>Every year, millions of tons of food go to waste while people struggle to find recipes for their ingredients. FlavorFind bridges this gap by turning your leftover ingredients into delicious, creative meals.</p>
+                    <div class="stats">
+                        <div class="stats-card">
+                          <div class="icon-circle">
+                            <i class="fas fa-recycle"></i>
+                          </div>
+                            <h3>40%</h3>
+                            <p>Less Food Waste</p>
+                            <small class="sub-text">Average reduction when using our platform</small>
+                        </div>
+                        <div class="stats-card">
+                          <div class="icon-circle">
+                            <i class="fas fa-leaf"></i>
+                          </div>
+                            <h3>2.5M</h3>
+                            <p>Ingredients Saved</p>
+                            <small class="sub-text">From going to waste this year</small>
+                        </div>
+                        <div class="stats-card">
+                          <div class="icon-circle">
+                            <i class="fas fa-heart"></i>
+                          </div>
+                            <h3>1M+</h3>
+                            <p>Happy Cooks</p>
+                            <small class="sub-text">Creating delicious meals from leftovers</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-image">
+                    <img src="images/info-img.png" alt="Food Waste">
+                </div>
+            </section>
+
+            <!-- About Section -->
+<section id="about" class="about">
+  <h2>About Us</h2>
+  <p>
+    At <strong>FlavourFind</strong>, we believe cooking should be simple, fun, and sustainable. 
+    Our mission is to help you transform everyday ingredients into delicious meals while 
+    reducing food waste in your kitchen.
+  </p>
+  <p>
+    We bring together home cooks, food enthusiasts, and anyone who wants to 
+    explore new recipes using what they already have. By encouraging creativity 
+    and mindful cooking, we aim to make your kitchen a <em>zero-waste haven</em>.
+  </p>
+  <p>
+    Whether you're looking for quick snacks, healthy meals, or gourmet dishes, 
+    FlavourFind is here to inspire you with recipes tailored to your pantry. 
+    Let’s cook smarter, waste less, and enjoy more!
+  </p>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact">
+  <h2>Contact Us</h2>
+  <p>
+    <i class="fas fa-envelope"></i> FlavorFind@gmail.com
+  </p>
+  <!--<p>
+    <i class="fas fa-phone"></i> +91 98765 43210
+  </p> -->
+</section>
+
+<!--------------------------------- Footer ---------------------------------------->
+             <footer>
+                <div class="footer-content">
+                    <p>&copy; 2025 FlavorFind. All rights reserved.</p>
+                    <nav>
+                      <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#recipes">Recipes</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                    </nav>
+                    <div class="social-links">
+                       <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+    <i class="fab fa-twitter"></i>
+  </a>
+  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+    <i class="fab fa-instagram"></i>
+    </a>
+                        </div>
+                </div>
+          </footer>
+
+   <!--------------------------------- Login Modal --------------------------------->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Login</h3>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!------------------------ Signup Modal --------------------------------->
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Signup</h3>
+      <form id="signupForm">
+        <input type="text" id="signupName" placeholder="Full Name" required>
+        <input type="email" id="signupEmail" placeholder="Email" required>
+        <input type="password" id="signupPassword" placeholder="Password" required>
+        <button type="submit">Signup</button>
+      </form>
+    </div>
+  </div>
+
+  <!------------------------ Recipes Modal --------------------------------->
+
+  <div id="recipeModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="recipeTitle"></h2>
+        <div id="recipeIngredients"></div>
+        <div id="recipeInstructions"></div>
+    </div>
+</div>
+
+  <script src="script.js"></script>
+    </body>
+</html>
