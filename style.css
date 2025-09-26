@@ -15,7 +15,7 @@ body {
 
 a {
     text-decoration: none;
-    color: inherit;
+    color: inherit; 
 }
 
 h1, h2, h3 {
@@ -1028,7 +1028,7 @@ footer {
     }
 
     #categoryModal .modal-content {
-        max-width: 90%;
+        max-width: 90%; 
     }
 
     .category-recipes-grid {
@@ -1037,7 +1037,7 @@ footer {
     }
 
     #categoryModal .recipe-card img {
-        height: 150px;
+        height: 150px; 
     }
 }
 
@@ -1106,7 +1106,7 @@ footer {
     }
 
     #categoryModal .modal-content {
-        max-width: 90%;
+        max-width: 90%; 
     }
 
     .category-recipes-grid {
@@ -1114,6 +1114,6 @@ footer {
     }
 
     #categoryModal .recipe-card img {
-        height: 120px;
+        height: 120px; 
     }
 }
