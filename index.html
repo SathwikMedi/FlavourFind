@@ -6,40 +6,40 @@
         <meta name="description" content="Find recipes from the ingredients you already have. Reduce food waste and cook smarter.">
         <title>FlavourFind</title>
         <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <style>
     html {
-      scroll-behavior: smooth; /* Smooth scrolling effect */
+      scroll-behavior: smooth; 
     }
   </style>
     </head>
     <body>
-       <!-- Header / Navbar -->
-<header class="header">
-  <div class="container">
-    <!-- Logo -->
-    <div class="logo">
-        <img src="images/logo-bg.png" alt="Recipe Finder Logo">
-       <span class="logo-text">FlavourFind</span>
-     </div>
+<!---------------------------- Header ----------------------------->
+    <header class="header">
+        <div class="container">
+            <!-- Logo -->
+            <div class="logo">
+                <img src="images/logo-bg.png" alt="Recipe Finder Logo">
+                <span class="logo-text">FlavourFind</span>
+            </div>
 
-    <!-- Navigation -->
-    <nav class="nav">
-      <a href="#home">Home</a>
-      <a href="#recipes">Recipes</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
+            <!-- Navigation -->
+            <nav class="nav">
+                <a href="#home">Home</a>
+                <a href="#recipes">Recipes</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
 
-    <!-- login Button -->
-    <div class="auth-buttons">
-    <a href="#" class="loginBtn">Login</a>
-    <a href="#" class="signupBtn">Signup</a>
-  </div>
-  </div>
-</header>
+            <!-- Auth Buttons and User Icon -->
+            <div class="auth-buttons">
+                  <a href="#" class="loginBtn">Login</a>
+                  <a href="#" class="signupBtn">Signup</a>
+                </div>
+        </div>
+    </header>
 
-        <!-- Hero Section -->
+        <!--------------------------------- Hero Section ------------------------------------------->
          <section id="home" class="hero">
   <div class="hero-card">
     <h1>
@@ -109,7 +109,7 @@
 
   </div>
 </section>
-<!-- -------------------------------------------------------------------------------------------------------- -->>
+<!-- -------------------------------------------- Categories Section ------------------------------------------------------------ -->>
 
 <!-- Recipe Categories Section -->
 <section class="categories">
@@ -118,9 +118,9 @@
 
     <!-- Quick Recipes -->
      <div class="category-card">
-      <div class="icon-circle-category1">
-         <i class="fas fa-clock"></i>
-       </div>
+        <div class="icon-circle-category1">
+          <i class="fas fa-clock"></i>
+        </div>
       <h3>Quick Recipes</h3>
       <p>Delicious meals ready in under 30 minutes.</p>
       <p><span class="highlight">120+</span> recipes</p>
@@ -129,7 +129,7 @@
 
      <!-- Healthy Choices -->
      <div class="category-card">
-     <div class="icon-circle-category2">
+      <div class="icon-circle-category2">
          <i class="fas fa-heart"></i>
        </div>
       <h3>Healthy Choices</h3>
@@ -279,6 +279,16 @@
         <h2 id="recipeTitle"></h2>
         <div id="recipeIngredients"></div>
         <div id="recipeInstructions"></div>
+    </div>
+</div>
+
+   <!------------------------ Categories Modal --------------------------------->
+
+<div id="categoryModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="categoryTitle"></h2>
+        <div id="categoryRecipes" class="recipe-grid"></div>
     </div>
 </div>
 
