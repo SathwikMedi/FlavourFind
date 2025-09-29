@@ -7,11 +7,6 @@
         <title>FlavourFind</title>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <style>
-    html {
-      scroll-behavior: smooth; 
-    }
-  </style>
     </head>
     <body>
 <!---------------------------- Header ----------------------------->
@@ -33,9 +28,21 @@
 
             <!-- Auth Buttons and User Icon -->
             <div class="auth-buttons">
-                  <a href="#" class="loginBtn">Login</a>
-                  <a href="#" class="signupBtn">Signup</a>
+                <a href="#" class="loginBtn">Login</a>
+                <a href="#" class="signupBtn">Signup</a>
+            </div>
+
+            <!-- User Icon (Hidden by default, shown after login) -->
+            <div class="user-icon">
+                <div class="icon-circle">
+                    <i class="fas fa-user"></i>
                 </div>
+                <div class="user-dropdown">
+                    <p><strong>Name:</strong> <span id="userName"></span></p>
+                    <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                    <button id="logoutBtn">Logout</button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -62,7 +69,7 @@
 <section id="recipes" class="results">
   <h2>Recipe Results</h2>
   <div id="recipes-container" class="recipes-grid">
-    <!-- Dynamic recipes will be inserted here; remove static ones after testing -->
+    <!-- Dynamic recipes will be inserted here -->
     
     <!-- Recipe Card 1 -->
     <div class="recipe-card">
@@ -77,8 +84,6 @@
         <button>View Recipe</button>
       </div>
     </div>
-
-    
 
     <!-- Recipe Card 2 -->
     <div class="recipe-card">
@@ -109,7 +114,6 @@
 
   </div>
 </section>
-<!-- -------------------------------------------------------------------------------------------------------- -->>
 
 <!-- Recipe Categories Section -->
 <section class="categories">
@@ -124,7 +128,7 @@
       <h3>Quick Recipes</h3>
       <p>Delicious meals ready in under 30 minutes.</p>
       <p><span class="highlight">120+</span> recipes</p>
-      <button class="category-btn">Explore Recipes</button>
+      <button class="category-btn" data-category="quick">Explore Recipes</button>
      </div>
 
      <!-- Healthy Choices -->
@@ -135,7 +139,7 @@
       <h3>Healthy Choices</h3>
       <p>Nutritious and balanced recipes for everyday wellness.</p>
       <p><span class="highlight">95+</span> recipes</p>
-      <button class="category-btn">Explore Recipes</button>
+      <button class="category-btn" data-category="healthy">Explore Recipes</button>
      </div>
 
      <!-- Most Popular -->
@@ -146,14 +150,12 @@
       <h3>Most Popular</h3>
       <p>Our top-rated and trending recipes loved by all.</p>
       <p><span class="highlight">200+</span> recipes</p>
-      <button class="category-btn">Explore Recipes</button>
+      <button class="category-btn" data-category="popular">Explore Recipes</button>
      </div>
   </div>
 </section>
 
-<!-- -------------------------------------------------------------------------------------------------------- -->
-
-           <!-- Food Waste Awareness / Info Section -->
+           <!-------------------------------------------- Food Waste Awareness Section ---------------------------------------->
             <section class="info">
                 <div class="info-text">
                     <h2>Transform your kitchen into a <span class="info-highlight">Zero-Waste Haven.</span></h2>
@@ -190,7 +192,7 @@
                 </div>
             </section>
 
-            <!-- About Section -->
+            <!------------------------------------------- About Section ---------------------------------------------->
 <section id="about" class="about">
   <h2>About Us</h2>
   <p>
@@ -206,7 +208,7 @@
   <p>
     Whether you're looking for quick snacks, healthy meals, or gourmet dishes, 
     FlavourFind is here to inspire you with recipes tailored to your pantry. 
-    Let’s cook smarter, waste less, and enjoy more!
+    Let's cook smarter, waste less, and enjoy more!
   </p>
 </section>
 
@@ -216,9 +218,6 @@
   <p>
     <i class="fas fa-envelope"></i> FlavorFind@gmail.com
   </p>
-  <!--<p>
-    <i class="fas fa-phone"></i> +91 98765 43210
-  </p> -->
 </section>
 
 <!--------------------------------- Footer ---------------------------------------->
@@ -282,11 +281,13 @@
     </div>
 </div>
 
+<!------------------------ Categories Modal --------------------------------->
+
 <div id="categoryModal" class="modal" aria-hidden="true">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2 id="categoryTitle"></h2>
-        <div id="categoryRecipes" class="recipe-grid"></div>
+        <div id="categoryRecipes" class="category-recipes-grid"></div>
     </div>
 </div>
 
