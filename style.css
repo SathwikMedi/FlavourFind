@@ -5,6 +5,10 @@
     box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth; 
+}
+
 /* Global Styles */
 body {
     font-family: Arial, Helvetica, sans-serif;
@@ -39,7 +43,8 @@ h1, h2, h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
+  min-height: 70px;
 }
 
 /* Logo */
@@ -99,6 +104,78 @@ h1, h2, h3 {
   text-decoration: none;
   transition: 0.3s ease;
   font-family: 'Oswald', cursive;
+}
+
+/* User Icon Styles */
+.user-icon {
+  display: none;
+  position: relative;
+  cursor: pointer;
+  align-items: center;
+  gap: 8px;
+  align-self: center;
+  height: 35px;
+}
+
+.user-icon .icon-circle {
+  background: #567d46;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22px;
+}
+
+.user-icon .icon-circle i {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.user-dropdown {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  min-width: 200px;
+  z-index: 1001;
+}
+
+.user-dropdown.show {
+  display: block;
+}
+
+.user-dropdown p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.user-dropdown p strong {
+  color: #567d46;
+}
+
+.user-dropdown button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #ff5a1c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  transition: background 0.3s ease;
+}
+
+.user-dropdown button:hover {
+  background-color: #e64a19;
 }
 
 /*------------------ Hero Section -------------------------*/
@@ -221,6 +298,8 @@ h1, h2, h3 {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .recipe-card:hover {
@@ -239,6 +318,9 @@ h1, h2, h3 {
 .recipe-card-content {
   padding: 1rem;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .recipe-card-content h3 {
@@ -281,9 +363,10 @@ h1, h2, h3 {
   font-size: 0.9rem;
   text-decoration: none;
   display: inline-block;
-  margin-bottom: 1rem;
   cursor: pointer;
   transition: background 0.2s ease;
+  margin-top: auto;
+  width: fit-content;
 }
 
 .recipe-card-content button:hover {
@@ -301,7 +384,9 @@ h1, h2, h3 {
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
-    transition: background 0.3s ease; 
+    transition: background 0.3s ease;
+    margin-top: auto;
+    width: fit-content;
 }
 
 .view-recipe-btn:hover {
@@ -370,7 +455,7 @@ h1, h2, h3 {
     padding: 2rem;
     border-radius: 8px;
     width: 90%;
-    max-width: 800px; 
+    max-width: 900px; 
     position: relative;
     max-height: 80vh;
     overflow-y: auto;
@@ -383,6 +468,12 @@ h1, h2, h3 {
     font-size: 1.5rem;
     cursor: pointer;
     color: #333;
+}
+
+#categoryModal h2 {
+  font-family: 'Oswald', cursive;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 /* Category Recipe Grid */
@@ -588,6 +679,7 @@ h1, h2, h3 {
     background: #e64a19;
     transform: scale(1.05);
 }
+
 
 /* ------------------ Food Awarness section ------------------------*/
 .info {
@@ -927,19 +1019,22 @@ footer {
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .header .container {
-        flex-direction: column; 
+        flex-direction: row;
         align-items: center;
         padding: 1rem; 
+        gap: 1rem;
     }
 
     .logo {
-        margin-bottom: 1rem;
+        margin-bottom: 0;
+        margin-right: auto;
     }
 
     .nav {
+        order: 3;
+        width: 100%;
         gap: 1rem; 
         justify-content: center;
-        margin-bottom: 1rem;
     }
 
     .nav a {
@@ -949,11 +1044,18 @@ footer {
     .auth-buttons {
         gap: 5px; 
         justify-content: center;
+        order: 2;
+        margin-left: auto;
     }
 
     .auth-buttons a {
         padding: 6px 12px; 
         font-size: 12px;
+    }
+
+    .user-icon {
+        order: 2;
+        margin-left: auto;
     }
 
     .hero {
