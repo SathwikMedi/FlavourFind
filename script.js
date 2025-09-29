@@ -1,34 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Element selections
+    // Select DOM elements
+    const loginBtn = document.querySelector('.loginBtn');
+    const signupBtn = document.querySelector('.signupBtn');
     const loginModal = document.getElementById('loginModal');
     const signupModal = document.getElementById('signupModal');
     const recipeModal = document.getElementById('recipeModal');
     const categoryModal = document.getElementById('categoryModal');
-    const loginBtn = document.querySelector('.loginBtn');
-    const signupBtn = document.querySelector('.signupBtn');
     const closeButtons = document.querySelectorAll('.close');
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
     const heroSearchForm = document.getElementById('heroSearchForm');
     const heroInput = document.getElementById('heroInput');
+    const recipesGrid = document.getElementById('recipes-container');
     const authButtons = document.querySelector('.auth-buttons');
-    const recipeTitle = document.getElementById('recipeTitle');
-    const recipeIngredients = document.getElementById('recipeIngredients');
-    const recipeInstructions = document.getElementById('recipeInstructions');
-    const categoryTitle = document.getElementById('categoryTitle');
-    const categoryRecipes = document.getElementById('categoryRecipes');
-
-    // Enhanced Debugging
-    console.log('DOM Loaded');
-    console.log('Header DOM:', document.querySelector('.header').outerHTML);
-    console.log('Initial Auth buttons element:', authButtons, 'Exists:', !!authButtons);
-
-    if (!authButtons) {
-        console.error('Critical: Auth buttons not found in DOM. Check HTML structure.');
-    }
+    const userIcon = document.querySelector('.user-icon');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const categoryButtons = document.querySelectorAll('.category-btn');
 
     // Spoonacular API key
-    const apiKey = '1e66e9328b904ad6ab3783341929c3e8'; 
+    const apiKey = '1e66e9328b904ad6ab3783341929c3e8';
 
     // Function to open a modal
     function openModal(modal) {
@@ -64,28 +54,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to update header based on login state
-    function updateHeader(isLoggedIn) {
-        if (!authButtons) {
-            console.error('Auth buttons not available');
-            return;
+    function updateHeader(isLoggedIn, user = null) {
+        if (isLoggedIn && authButtons && userIcon && user) {
+            authButtons.style.display = 'none';
+            userIcon.style.display = 'flex';
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+        } else if (authButtons && userIcon) {
+            authButtons.style.display = 'flex';
+            userIcon.style.display = 'none';
         }
-
-        console.log('Updating header, isLoggedIn:', isLoggedIn);
-        console.log('Auth buttons classes:', authButtons.className);
-
-        if (isLoggedIn) {
-            authButtons.style.display = 'none'; 
-        } else {
-            authButtons.style.display = 'flex'; 
-        }
-
-        // Force reflow to ensure CSS updates
-        authButtons.offsetHeight;
     }
 
-    // Initial header update on load
+    // Check login state on page load
     const loggedInUser = localStorage.getItem('loggedInUser');
-    updateHeader(!!loggedInUser);
+    if (loggedInUser) {
+        const user = JSON.parse(loggedInUser);
+        updateHeader(true, user);
+    }
+
+    // Toggle user dropdown
+    if (userIcon) {
+        userIcon.addEventListener('click', () => {
+            const dropdown = userIcon.querySelector('.user-dropdown');
+            dropdown.classList.toggle('show');
+        });
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (userIcon && !userIcon.contains(e.target)) {
+            const dropdown = userIcon.querySelector('.user-dropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+        }
+    });
 
     // Event listeners for opening modals
     if (loginBtn) {
@@ -135,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('signupEmail').value;
             const password = document.getElementById('signupPassword').value;
 
+            // Check if email already exists
             const users = getUsers();
             const existingUser = users.find(user => user.email === email);
             if (existingUser) {
@@ -142,12 +147,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Save new user to localStorage
             const user = { name, email, password };
             saveUser(user);
             alert('Signup successful! You can now log in.');
             closeModal(signupModal);
             signupForm.reset();
-            updateHeader(false); 
         });
     }
 
@@ -158,13 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
 
+            // Check credentials against localStorage
             const users = getUsers();
             const user = users.find(user => user.email === email && user.password === password);
 
             if (user) {
                 alert(`Login successful! Welcome, ${user.name}!`);
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
-                updateHeader(true);
+                updateHeader(true, user);
                 closeModal(loginModal);
                 loginForm.reset();
             } else {
@@ -173,20 +179,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Handle logout
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('loggedInUser');
+            updateHeader(false);
+            alert('Logged out successfully!');
+        });
+    }
+
     // Function to fetch detailed recipe information
     async function fetchRecipeDetails(recipeId) {
         try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000);
             const response = await fetch(
-                `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}&includeNutrition=false`,
-                { signal: controller.signal }
+                `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}&includeNutrition=false`
             );
-            clearTimeout(timeoutId);
-            if (!response.ok) throw new Error(`Failed to fetch recipe details: ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch recipe details: ${response.status}`);
+            }
             return await response.json();
         } catch (error) {
-            console.error('Error fetching recipe details:', error.message);
+            console.error('Error fetching recipe details:', error);
             return null;
         }
     }
@@ -194,23 +207,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to determine tags based on recipe details
     function getRecipeTags(details) {
         const tags = [];
-        if (details && details.diets && details.diets.length > 0) {
-            const dietMap = {
-                'high-protein': 'High Protein',
-                'vegetarian': 'Vegetarian',
-                'vegan': 'Vegan',
-                'gluten-free': 'Gluten-Free',
-                'dairy-free': 'Dairy-Free'
-            };
-            details.diets.forEach(diet => {
-                if (dietMap[diet.toLowerCase()]) {
-                    tags.push(dietMap[diet.toLowerCase()]);
-                }
-            });
+        
+        if (!details) return ['Custom'];
+        
+        // Check for diet types
+        if (details.vegetarian) tags.push('Vegetarian');
+        if (details.vegan) tags.push('Vegan');
+        if (details.glutenFree) tags.push('Gluten-Free');
+        if (details.dairyFree) tags.push('Dairy-Free');
+        
+        // Check for ready in minutes (quick recipes)
+        if (details.readyInMinutes && details.readyInMinutes <= 30) {
+            tags.push('Quick');
         }
-        if (details && details.healthScore >= 70) {
+        
+        // Check for health score
+        if (details.healthScore && details.healthScore >= 70) {
             tags.push('Healthy');
         }
+        
+        // Check for high protein (if protein is more than 20g per serving)
+        if (details.nutrition && details.nutrition.nutrients) {
+            const protein = details.nutrition.nutrients.find(n => n.name === 'Protein');
+            if (protein && protein.amount > 20) {
+                tags.push('High Protein');
+            }
+        }
+        
+        // Check dishTypes for additional tags
+        if (details.dishTypes && details.dishTypes.length > 0) {
+            if (details.dishTypes.includes('dessert')) tags.push('Dessert');
+            if (details.dishTypes.includes('breakfast')) tags.push('Breakfast');
+        }
+        
         return tags.length > 0 ? tags : ['Custom'];
     }
 
@@ -222,14 +251,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        recipeTitle.textContent = details.title;
-        recipeIngredients.innerHTML = `
+        // Populate modal content
+        document.getElementById('recipeTitle').textContent = details.title;
+        document.getElementById('recipeIngredients').innerHTML = `
             <h4>Ingredients:</h4>
             <ul>
-                ${details.extendedIngredients.map(ing => `<li>${ing.original}</li>`).join('')}
+                ${details.extendedIngredients
+                    .map(ing => `<li>${ing.original}</li>`)
+                    .join('')}
             </ul>
         `;
-        recipeInstructions.innerHTML = `
+        document.getElementById('recipeInstructions').innerHTML = `
             <h4>Instructions:</h4>
             <p>${details.instructions || 'No instructions available.'}</p>
         `;
@@ -237,78 +269,132 @@ document.addEventListener('DOMContentLoaded', () => {
         openModal(recipeModal);
     }
 
-    // Function to fetch and render recipes by category in modal
-    async function fetchAndRenderRecipesByCategory(category) {
-        categoryTitle.textContent = category;
-        categoryRecipes.innerHTML = '<p class="loading">Loading...</p>';
-        openModal(categoryModal);
-
-        let url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=6`;
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-        const params = {};
-        switch (category.toLowerCase()) {
-            case 'quick recipes':
-                params.maxReadyTime = 30;
-                break;
-            case 'healthy choices':
-                params.healthScore = 70;
-                params.diet = 'vegetarian';
-                break;
-            case 'most popular':
-                params.sort = 'popularity';
-                params.sortDirection = 'desc';
-                break;
-            default:
-                console.warn('Unknown category:', category);
-                categoryRecipes.innerHTML = `<p>Error: Unknown category "${category}".</p>`;
-                return;
+    // Function to fetch recipes and render with modal trigger
+    async function fetchAndRenderRecipes(ingredients) {
+        // Scroll to recipes section
+        const recipesSection = document.querySelector('#recipes');
+        if (recipesSection) {
+            recipesSection.scrollIntoView({ behavior: 'smooth' });
         }
 
-        url += Object.entries(params)
-            .map(([key, value]) => `&${key}=${encodeURIComponent(value)}`)
-            .join('');
+        if (!ingredients.trim()) {
+            recipesGrid.innerHTML = '<p>Please enter ingredients to search.</p>';
+            return;
+        }
 
-        console.log('Fetching category URL:', url);
+        const url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${apiKey}&ingredients=${encodeURIComponent(ingredients)}&number=9&ranking=1`;
 
         try {
-            const response = await fetch(url, { signal: controller.signal });
-            clearTimeout(timeoutId);
-            if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-            const data = await response.json();
-            const recipes = data.results;
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+            const recipes = await response.json();
 
-            categoryRecipes.innerHTML = '';
+            recipesGrid.innerHTML = '';
 
             if (recipes.length === 0) {
-                categoryRecipes.innerHTML = `<p>No ${category.toLowerCase()} found.</p>`;
+                recipesGrid.innerHTML = '<p>No recipes found. Try different ingredients!</p>';
                 return;
             }
 
-            for (const recipe of recipes.slice(0, 3)) {
+            // Fetch details for each recipe and render
+            for (const recipe of recipes) {
                 const details = await fetchRecipeDetails(recipe.id);
-                if (details) {
-                    const tags = getRecipeTags(details);
+                const tags = getRecipeTags(details);
 
-                    const card = document.createElement('div');
-                    card.className = 'recipe-card';
-                    card.innerHTML = `
-                        <img src="${recipe.image}" alt="${recipe.title}">
-                        <div class="recipe-card-content">
-                            <h3>${recipe.title}</h3>
-                            <p>Ready in ${recipe.readyInMinutes} minutes</p>
-                            <div class="recipe-tags">
-                                ${tags.map(tag => `<span class="recipe-tag">${tag}</span>`).join('')}
-                            </div>
-                            <button class="view-recipe-btn" data-recipe-id="${recipe.id}">View Recipe</button>
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.innerHTML = `
+                    <img src="${recipe.image}" alt="${recipe.title}">
+                    <div class="recipe-card-content">
+                        <h3>${recipe.title}</h3>
+                        <p>Uses ${recipe.usedIngredientCount} of your ingredients. Needs ${recipe.missedIngredientCount} more.</p>
+                        <div class="recipe-tags">
+                            ${tags.map(tag => `<span class="recipe-tag">${tag}</span>`).join('')}
                         </div>
-                    `;
-                    categoryRecipes.appendChild(card);
-                }
+                        <button class="view-recipe-btn" data-recipe-id="${recipe.id}">View Recipe</button>
+                    </div>
+                `;
+                recipesGrid.appendChild(card);
             }
 
-            document.querySelectorAll('#categoryRecipes .view-recipe-btn').forEach(button => {
+            // Event listener for View Recipe buttons
+            document.querySelectorAll('.view-recipe-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const recipeId = e.target.getAttribute('data-recipe-id');
+                    showRecipeModal(recipeId);
+                });
+            });
+        } catch (error) {
+            console.error('Error fetching recipes:', error);
+            recipesGrid.innerHTML = '<p>Error fetching recipes. Check your API key or try again later.</p>';
+        }
+    }
+
+    // Function to fetch recipes by category
+    async function fetchCategoryRecipes(category) {
+        const categoryRecipesContainer = document.getElementById('categoryRecipes');
+        const categoryTitle = document.getElementById('categoryTitle');
+        
+        // Set category title
+        const categoryNames = {
+            'quick': 'Quick Recipes',
+            'healthy': 'Healthy Choices',
+            'popular': 'Most Popular'
+        };
+        categoryTitle.textContent = categoryNames[category] || 'Recipes';
+
+        categoryRecipesContainer.innerHTML = '<p>Loading recipes...</p>';
+        
+        let url = '';
+        
+        // Determine API endpoint based on category
+        if (category === 'quick') {
+            url = `https://api.spoonacular.com/recipes/random?apiKey=${apiKey}&number=12&tags=quick`;
+        } else if (category === 'healthy') {
+            url = `https://api.spoonacular.com/recipes/random?apiKey=${apiKey}&number=12&tags=healthy`;
+        } else if (category === 'popular') {
+            url = `https://api.spoonacular.com/recipes/random?apiKey=${apiKey}&number=12`;
+        }
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+            const data = await response.json();
+            const recipes = data.recipes || [];
+
+            categoryRecipesContainer.innerHTML = '';
+
+            if (recipes.length === 0) {
+                categoryRecipesContainer.innerHTML = '<p>No recipes found for this category.</p>';
+                return;
+            }
+
+            // Render recipes
+            for (const recipe of recipes) {
+                const tags = getRecipeTags(recipe);
+
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.innerHTML = `
+                    <img src="${recipe.image}" alt="${recipe.title}">
+                    <div class="recipe-card-content">
+                        <h3>${recipe.title}</h3>
+                        <p>${recipe.summary ? recipe.summary.substring(0, 100).replace(/<[^>]*>/g, '') + '...' : 'Delicious recipe to try!'}</p>
+                        <div class="recipe-tags">
+                            ${tags.map(tag => `<span class="recipe-tag">${tag}</span>`).join('')}
+                        </div>
+                        <button class="view-recipe-btn" data-recipe-id="${recipe.id}">View Recipe</button>
+                    </div>
+                `;
+                categoryRecipesContainer.appendChild(card);
+            }
+
+            // Event listener for View Recipe buttons in category modal
+            document.querySelectorAll('#categoryModal .view-recipe-btn').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const recipeId = e.target.getAttribute('data-recipe-id');
                     closeModal(categoryModal);
@@ -316,20 +402,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         } catch (error) {
-            clearTimeout(timeoutId);
-            console.error('Error fetching category recipes:', error.message);
-            categoryRecipes.innerHTML = `<p>Error loading ${category.toLowerCase()}. Please try again later or check your internet connection.</p>`;
+            console.error('Error fetching category recipes:', error);
+            categoryRecipesContainer.innerHTML = '<p>Error fetching recipes. Please try again later.</p>';
         }
     }
 
-    // Event listener for category buttons
-    document.querySelector('.categories').addEventListener('click', (e) => {
-        const categoryBtn = e.target.closest('.category-btn');
-        if (categoryBtn) {
-            e.preventDefault();
-            const category = categoryBtn.getAttribute('data-category');
-            fetchAndRenderRecipesByCategory(category);
-        }
+    // Handle category button clicks
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const category = button.getAttribute('data-category');
+            fetchCategoryRecipes(category);
+            openModal(categoryModal);
+        });
     });
 
     // Handle hero search form submission
@@ -337,10 +421,13 @@ document.addEventListener('DOMContentLoaded', () => {
         heroSearchForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const ingredients = heroInput.value.trim();
+            // Scroll to recipes section before fetching
             const recipesSection = document.querySelector('#recipes');
-            if (recipesSection) recipesSection.scrollIntoView({ behavior: 'smooth' });
-            fetchAndRenderRecipesByCategory(ingredients);
-            heroInput.value = '';
+            if (recipesSection) {
+                recipesSection.scrollIntoView({ behavior: 'smooth' });
+            }
+            fetchAndRenderRecipes(ingredients);
+            heroSearchForm.reset();
         });
     }
 });
