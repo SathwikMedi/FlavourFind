@@ -115,6 +115,7 @@ h1, h2, h3 {
   gap: 8px;
   align-self: center;
   height: 35px;
+  margin-top: 22px;
 }
 
 .user-icon .icon-circle {
@@ -125,7 +126,6 @@ h1, h2, h3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 22px;
 }
 
 .user-icon .icon-circle i {
@@ -276,9 +276,16 @@ h1, h2, h3 {
 .results h2 {
   font-size: 2rem;
   color: #333;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-weight: 600;
   font-family: 'Oswald', cursive;
+}
+
+.results-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+  font-style: italic;
 }
 
 /* Recipe Grid */
