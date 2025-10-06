@@ -68,11 +68,12 @@
 <!--------------------- Recipe Results Section --------------------------->
 <section id="recipes" class="results">
   <h2>Recipe Results</h2>
+  <p class="results-subtitle">Explore these popular recipes, or search for ingredients above to find personalized matches</p>
   <div id="recipes-container" class="recipes-grid">
-    <!-- Dynamic recipes will be inserted here -->
+    <!-- Static recipe cards with real Spoonacular IDs -->
     
     <!-- Recipe Card 1 -->
-    <div class="recipe-card">
+    <div class="recipe-card static-card">
       <img src="images/result-img1.png" alt="Delicious Pasta">
       <div class="recipe-card-content">
         <h3>Creamy Tomato Pasta</h3>
@@ -81,12 +82,12 @@
           <span class="recipe-tag">Vegetarian</span>
           <span class="recipe-tag">Quick</span>
         </div>
-        <button>View Recipe</button>
+        <button class="view-recipe-btn" data-recipe-id="654959">View Recipe</button>
       </div>
     </div>
 
     <!-- Recipe Card 2 -->
-    <div class="recipe-card">
+    <div class="recipe-card static-card">
       <img src="images/result-img2.png" alt="Fresh Salad">
       <div class="recipe-card-content">
         <h3>Green Veggie Salad</h3>
@@ -95,12 +96,12 @@
           <span class="recipe-tag">Vegan</span>
           <span class="recipe-tag">Healthy</span>
         </div>
-        <button>View Recipe</button>
+        <button class="view-recipe-btn" data-recipe-id="644387">View Recipe</button>
       </div>
     </div>
 
     <!-- Recipe Card 3 -->
-    <div class="recipe-card">
+    <div class="recipe-card static-card">
       <img src="images/result-img3.png" alt="Grilled Chicken">
       <div class="recipe-card-content">
         <h3>Grilled Chicken</h3>
@@ -108,7 +109,7 @@
         <div class="recipe-tags">
           <span class="recipe-tag">High Protein</span>
         </div>
-        <button>View Recipe</button>
+        <button class="view-recipe-btn" data-recipe-id="638308">View Recipe</button>
       </div>
     </div>
 
@@ -155,7 +156,7 @@
   </div>
 </section>
 
-           <!-------------------------------------------- Food Waste Awareness Section ---------------------------------------->
+           <!-- Food Waste Awareness / Info Section -->
             <section class="info">
                 <div class="info-text">
                     <h2>Transform your kitchen into a <span class="info-highlight">Zero-Waste Haven.</span></h2>
@@ -192,7 +193,7 @@
                 </div>
             </section>
 
-            <!------------------------------------------- About Section ---------------------------------------------->
+            <!-- About Section -->
 <section id="about" class="about">
   <h2>About Us</h2>
   <p>
