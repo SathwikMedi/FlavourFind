@@ -1,4 +1,106 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Load Anime.js library
+    const animeScript = document.createElement('script');
+    animeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js';
+    document.head.appendChild(animeScript);
+    
+    animeScript.onload = function() {
+        // Hero card entrance animation (immediate on load)
+        anime({
+            targets: '.hero-card',
+            translateY: [50, 0],
+            opacity: [0, 1],
+            duration: 1000,
+            easing: 'easeOutExpo'
+        });
+
+        // Make static recipe cards functional on page load
+        attachStaticCardListeners();
+
+        // Set up Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px'
+        };
+
+        const animateOnScroll = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    
+                    // Animate category cards
+                    if (target.classList.contains('categories')) {
+                        anime({
+                            targets: '.category-card',
+                            translateY: [30, 0],
+                            opacity: [0, 1],
+                            delay: anime.stagger(150),
+                            duration: 800,
+                            easing: 'easeOutQuad'
+                        });
+                        observer.unobserve(target);
+                    }
+                    
+                    // Animate stats cards
+                    if (target.classList.contains('info')) {
+                        anime({
+                            targets: '.stats-card',
+                            scale: [0.8, 1],
+                            opacity: [0, 1],
+                            delay: anime.stagger(100),
+                            duration: 600,
+                            easing: 'easeOutElastic(1, .6)'
+                        });
+                        observer.unobserve(target);
+                    }
+                    
+                    // Animate about section
+                    if (target.classList.contains('about')) {
+                        anime({
+                            targets: '.about h2, .about p',
+                            translateY: [20, 0],
+                            opacity: [0, 1],
+                            delay: anime.stagger(100),
+                            duration: 600,
+                            easing: 'easeOutQuad'
+                        });
+                        observer.unobserve(target);
+                    }
+                    
+                    // Animate contact section
+                    if (target.classList.contains('contact')) {
+                        anime({
+                            targets: '.contact h2, .contact p',
+                            scale: [0.9, 1],
+                            opacity: [0, 1],
+                            delay: anime.stagger(100),
+                            duration: 600,
+                            easing: 'easeOutQuad'
+                        });
+                        observer.unobserve(target);
+                    }
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(animateOnScroll, observerOptions);
+        
+        // Observe sections that should animate on scroll
+        const sectionsToAnimate = document.querySelectorAll('.categories, .info, .about, .contact');
+        sectionsToAnimate.forEach(section => observer.observe(section));
+    };
+
+    // Function to attach event listeners to static recipe cards
+    function attachStaticCardListeners() {
+        const staticCards = document.querySelectorAll('.static-card .view-recipe-btn');
+        staticCards.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const recipeId = e.target.getAttribute('data-recipe-id');
+                showRecipeModal(recipeId);
+            });
+        });
+    }
+
     // Select DOM elements
     const loginBtn = document.querySelector('.loginBtn');
     const signupBtn = document.querySelector('.signupBtn');
@@ -26,6 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'flex';
             modal.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
+            
+            // Animate modal entrance with Anime.js
+            if (window.anime) {
+                anime({
+                    targets: modal.querySelector('.modal-content'),
+                    scale: [0.7, 1],
+                    opacity: [0, 1],
+                    duration: 400,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+            }
         } else {
             console.error('Modal not found');
         }
@@ -169,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (user) {
                 alert(`Login successful! Welcome, ${user.name}!`);
-                localStorage.setItem('loggedInUser', JSON.stringify(user));
+                localStorage.setItem('loggedInUser', JSON.stringify(user)); 
                 updateHeader(true, user);
                 closeModal(loginModal);
                 loginForm.reset();
@@ -216,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (details.glutenFree) tags.push('Gluten-Free');
         if (details.dairyFree) tags.push('Dairy-Free');
         
-        // Check for ready in minutes (quick recipes)
+        // Check for ready in minutes
         if (details.readyInMinutes && details.readyInMinutes <= 30) {
             tags.push('Quick');
         }
@@ -226,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tags.push('Healthy');
         }
         
-        // Check for high protein (if protein is more than 20g per serving)
+        // Check for high protein
         if (details.nutrition && details.nutrition.nutrients) {
             const protein = details.nutrition.nutrients.find(n => n.name === 'Protein');
             if (protein && protein.amount > 20) {
@@ -291,7 +404,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const recipes = await response.json();
 
+            // Clear the container
             recipesGrid.innerHTML = '';
+            
+            // Update subtitle to reflect search results
+            const subtitle = document.querySelector('.results-subtitle');
+            if (subtitle) {
+                subtitle.textContent = `Found ${recipes.length} recipes matching your ingredients`;
+            }
 
             if (recipes.length === 0) {
                 recipesGrid.innerHTML = '<p>No recipes found. Try different ingredients!</p>';
@@ -317,6 +437,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 recipesGrid.appendChild(card);
+            }
+
+            // Animate recipe cards with stagger effect
+            if (window.anime) {
+                anime({
+                    targets: '.recipe-card',
+                    translateY: [30, 0],
+                    opacity: [0, 1],
+                    delay: anime.stagger(100),
+                    duration: 600,
+                    easing: 'easeOutQuad'
+                });
             }
 
             // Event listener for View Recipe buttons
@@ -351,11 +483,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Determine API endpoint based on category
         if (category === 'quick') {
-            url = `https://api.spoonacular.com/recipes/random?apiKey=${apiKey}&number=12&tags=quick`;
+            url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=12&maxReadyTime=30&addRecipeInformation=true`;
         } else if (category === 'healthy') {
-            url = `https://api.spoonacular.com/recipes/random?apiKey=${apiKey}&number=12&tags=healthy`;
+            url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=12&minHealthScore=70&addRecipeInformation=true`;
         } else if (category === 'popular') {
-            url = `https://api.spoonacular.com/recipes/random?apiKey=${apiKey}&number=12`;
+            url = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=12&sort=popularity&addRecipeInformation=true`;
         }
 
         try {
@@ -364,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`API request failed with status ${response.status}`);
             }
             const data = await response.json();
-            const recipes = data.recipes || [];
+            const recipes = data.results || [];
 
             categoryRecipesContainer.innerHTML = '';
 
@@ -391,6 +523,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 categoryRecipesContainer.appendChild(card);
+            }
+
+            // Animate category modal recipe cards
+            if (window.anime) {
+                anime({
+                    targets: '#categoryModal .recipe-card',
+                    translateY: [30, 0],
+                    opacity: [0, 1],
+                    delay: anime.stagger(80),
+                    duration: 500,
+                    easing: 'easeOutQuad'
+                });
             }
 
             // Event listener for View Recipe buttons in category modal
